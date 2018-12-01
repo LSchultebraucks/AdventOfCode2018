@@ -1,12 +1,17 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Day1 {
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         partOne();
         partTwo();
     }
@@ -14,18 +19,15 @@ public class Day1 {
     private static void partOne() {
         int currentFrequency = 0;
 
-        File inputFile = new File("input.txt");
-        try {
-            Scanner scanner = new Scanner(inputFile);
+        List<Integer> frequencies = new ArrayList<>();
 
-            while (scanner.hasNext()) {
-                int frequency = scanner.nextInt();
-                currentFrequency += frequency;
-            }
-
-            scanner.close();
-        } catch (FileNotFoundException e) {
+        try (Stream<String> fileStream = Files.lines(Paths.get("input.txt"))) {
+            frequencies = fileStream.map(Integer::parseInt).collect(Collectors.toList());
+        } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (int frequency : frequencies) {
+            currentFrequency += frequency;
         }
 
         System.out.println("Resulting Frequency is " + currentFrequency);
