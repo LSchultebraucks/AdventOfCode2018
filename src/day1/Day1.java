@@ -1,3 +1,5 @@
+package day1;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,7 +20,7 @@ public class Day1 {
     private static void partOne() {
         int currentFrequency = 0;
 
-        try (Stream<String> fileStream = Files.lines(Paths.get("input.txt"))) {
+        try (Stream<String> fileStream = Files.lines(Paths.get("day1/input.txt"))) {
             currentFrequency = fileStream.mapToInt(Integer::parseInt).sum();
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,7 +38,7 @@ public class Day1 {
 
         List<Integer> frequencies = new ArrayList<>();
 
-        File inputFile = new File("input.txt");
+        File inputFile = new File("day1/input.txt");
         try {
             Scanner scanner = new Scanner(inputFile);
 
