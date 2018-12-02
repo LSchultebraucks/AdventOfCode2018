@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import Counter
 from difflib import SequenceMatcher
 
 from operator import itemgetter
@@ -14,28 +14,16 @@ def main():
 
 
 def part_one():
-    with open('input.txt', 'r') as input_file:
-        lines = [line for line in input_file]
-
     word_twice_count = 0
     word_three_times_count = 0
 
-    for line in lines:
-        word_count_dic = defaultdict(int)
-        has_char_twice = False
-        has_char_three_times = False
-        for char in line:
-            word_count_dic[char] += 1
-        for key in word_count_dic.keys():
-            if word_count_dic[key] == 2:
-                has_char_twice = True
-            elif word_count_dic[key] == 3:
-                has_char_three_times = True
-
-        if has_char_twice:
-            word_twice_count += 1
-        if has_char_three_times:
-            word_three_times_count += 1
+    with open('input.txt', 'r') as input_file:
+        for line in input_file:
+            line_counter = Counter(line)
+            if 2 in line_counter.values():
+                word_twice_count += 1
+            if 3 in line_counter.values():
+                word_three_times_count += 1
 
     checksum = word_twice_count * word_three_times_count
 
