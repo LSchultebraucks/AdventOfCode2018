@@ -7,6 +7,7 @@ from operator import itemgetter
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
+
 def main():
     part_one()
     part_two()
@@ -45,20 +46,15 @@ def part_two():
     with open('input.txt', 'r') as input_file:
         lines = [line for line in input_file]
 
-    similarity_strings = []
-
-    for line in lines:
-        for comparing_line in lines:
-            if line is not comparing_line:
-                similarity_strings.append((line, comparing_line, similar(line, comparing_line)))
+    similarity_strings = [(line, comparing_line, similar(line, comparing_line))
+                          for line in lines for comparing_line in lines
+                          if line is not comparing_line]
 
     most_similair_strings = max(similarity_strings, key=itemgetter(2))
 
-    result_word = ''
-
-    for char_word_one, char_word_two in zip(most_similair_strings[0], most_similair_strings[1]):
-        if char_word_one == char_word_two:
-            result_word += char_word_one
+    result_word = ''.join([char_word_one
+                           for char_word_one, char_word_two in zip(most_similair_strings[0], most_similair_strings[1])
+                           if char_word_one == char_word_two])
 
     print result_word
 
