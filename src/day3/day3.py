@@ -8,6 +8,14 @@ def main():
     part_two(data, overlaps)
 
 
+def part_two(data, overlaps):
+    print(find_no_overlaps(data, overlaps))
+
+
+def part_one(collisions):
+    print(len(collisions))
+
+
 def parse_data():
     with open('input.txt', 'r') as input_file:
         data = []
@@ -47,14 +55,6 @@ def find_no_overlaps(data, overlaps):
     for line in data:
         if has_no_collisions(line['place'], line['dim'], overlaps):
             return line['id']
-
-
-def part_two(data, overlaps):
-    print(find_no_overlaps(data, overlaps))
-
-
-def part_one(collisions):
-    print(len(collisions))
 
 
 if __name__ == '__main__':
