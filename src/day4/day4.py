@@ -1,49 +1,46 @@
-import re
 from collections import defaultdict
-
-import datetime
-from operator import itemgetter
 
 
 def main():
-    part_one()
+    guard_sleep_dict = calculate_guard_sleep_dict()
+    part_one(guard_sleep_dict)
+    part_two(guard_sleep_dict)
 
 
-def part_one():
-    data = []
-    with open('input.txt', 'r') as input_file:
-        for line in input_file:
-            data.append({'date': line[1:17], 'action': line[19:]})
+def calculate_guard_sleep_dict():
+    with open('input.txt', 'r') as data:
 
-    data = sorted(data, key=date_key)
+        sorted_data = sorted(data)  # This will work too... No extra key required
 
-    print data
+        guard_sleep_dict = defaultdict(lambda: [0 for x in range(60)])
+        current_guard = -1
+        start_sleeping = -1
+        for line in sorted_data:
+            if line[25] == "#":
+                current_guard = line.split()[3]
+            elif line[25] == "a":
+                start_sleeping = int(line[15:17])
+            else:  # "wakes up"
+                end_sleeping = int(line[15:17])
+                for x in range(start_sleeping, end_sleeping):
+                    guard_sleep_dict[current_guard][x] += 1
 
-    sleep_dic = defaultdict(int)
-    current_guard = -1
-    falls_sleep_date = datetime.datetime.now()
-    for line in data:
-        if 'Guard' in line['action']:
-            current_guard = [int(n) for n in re.findall(r'\d+', line['action'])][0]
-        if 'falls asleep' in line['action']:
-            date_list = [int(n) for n in re.findall(r'\d+', line['date'])]
-            falls_sleep_date = datetime.datetime(year=date_list[0], month=date_list[1], day=date_list[2],
-                                                 hour=date_list[3], minute=date_list[4])
-        if 'wakes up' in line['action']:
-            date_list = [int(n) for n in re.findall(r'\d+', line['date'])]
-            wakes_up_date = datetime.datetime(year=date_list[0], month=date_list[1], day=date_list[2],
-                                              hour=date_list[3], minute=date_list[4])
-            sleep_dic[current_guard] += (wakes_up_date - falls_sleep_date).total_seconds() / 60.0
-
-    sleep_dic = sorted(sleep_dic.items(), key=itemgetter(1))
-
-    guard = sleep_dic[-1]
-
-    print guard[0] * guard[1]
+    return guard_sleep_dict
 
 
-def date_key(item):
-    return datetime.datetime.strptime(item['date'], '%Y-%m-%d %H:%M')
+def part_one(guard_sleep_dict):
+    guard = sorted(guard_sleep_dict.keys(), key=lambda g: -sum(guard_sleep_dict[g]))[0]
+
+    gh = guard_sleep_dict[guard]
+    minute = gh.index(max(gh))
+    print int(guard[1:]) * minute
+
+
+def part_two(guard_sleep_dict):
+    guard = sorted(guard_sleep_dict.keys(), key=lambda g: -max(guard_sleep_dict[g]))[0]
+    gh = guard_sleep_dict[guard]
+    minute = gh.index(max(gh))
+    print int(guard[1:]) * minute
 
 
 if __name__ == '__main__':
