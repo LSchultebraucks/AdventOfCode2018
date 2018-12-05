@@ -1,7 +1,7 @@
 def main():
     polymer = parse_input()
     print(part_one(polymer))
-    part_two(polymer)
+    print(part_two(polymer))
 
 
 def parse_input():
@@ -28,7 +28,8 @@ def part_one(polymer):
 
 
 def part_two(polymer):
-    pass
+    chars_in_polymer = set(polymer.lower())
+    return min(part_one(polymer.replace(char, '').replace(char.upper(), '')) for char in chars_in_polymer)
 
 
 if __name__ == '__main__':
