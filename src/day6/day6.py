@@ -6,6 +6,7 @@ from operator import itemgetter
 def main():
     coordinates = read_coordinates()
     part_one(coordinates)
+    part_two(coordinates)
 
 
 def read_coordinates():
@@ -39,6 +40,27 @@ def part_one(coordinates):
                     area_dict[min_h_distance[1]] = float('-inf')
 
     print max(area_dict.iteritems(), key=itemgetter(1))
+
+
+def part_two(coordinates):
+    min_x = min([cor_pair[1] for cor_pair in coordinates])
+    max_x = max([cor_pair[1] for cor_pair in coordinates]) + 1
+    min_y = min([cor_pair[0] for cor_pair in coordinates])
+    max_y = max([cor_pair[0] for cor_pair in coordinates]) + 1
+
+    total_distance_dict = defaultdict(int)
+
+    for i in range(min_y, max_y):
+        for j in range(min_x, max_x):
+            total_distance_dict[(i, j)] = sum([hamming_distance([i, j], cor_pair) for cor_pair in coordinates])
+
+    region_size = 0
+
+    for _, value in total_distance_dict.iteritems():
+        if value < 10000:
+            region_size += 1
+
+    print region_size
 
 
 def hamming_distance(a, b):
